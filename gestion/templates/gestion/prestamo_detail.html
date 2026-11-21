@@ -1,0 +1,52 @@
+{% extends 'gestion/base.html' %}
+
+{% block title %}Préstamo {{ prestamo.id }}{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Préstamo #{{ prestamo.id }}</h1>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header fw-bold">Datos del préstamo</div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-5">Fecha de préstamo</dt>
+                    <dd class="col-sm-7">{{ prestamo.fecha_prestamo|date:"d/m/Y" }}</dd>
+                    <dt class="col-sm-5">Fecha de devolución</dt>
+                    <dd class="col-sm-7">{{ prestamo.fecha_devolucion|date:"d/m/Y"|default:"Sin devolver" }}</dd>
+                    <dt class="col-sm-5">Estado</dt>
+                    <dd class="col-sm-7">
+                        {% if prestamo.devuelto %}<span class="badge bg-success">Devuelto</span>
+                        {% else %}<span class="badge bg-warning text-dark">Prestado</span>{% endif %}
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-header fw-bold">Libro</div>
+            <div class="card-body">
+                <p class="mb-1"><a href="{% url 'detalle_libro' prestamo.libro.pk %}">{{ prestamo.libro.titulo }}</a></p>
+                <p class="mb-1 small">Autor: <a href="{% url 'detalle_autor' prestamo.libro.autor.pk %}">{{ prestamo.libro.autor.nombre }}</a></p>
+                <p class="mb-0 small text-muted">ISBN {{ prestamo.libro.isbn }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-header fw-bold">Socio</div>
+            <div class="card-body">
+                <p class="mb-1"><a href="{% url 'detalle_socio' prestamo.socio.pk %}">{{ prestamo.socio.nombre }}</a></p>
+                <p class="mb-1 small">Documento: {{ prestamo.socio.documento }}</p>
+                <p class="mb-0 small text-muted">{{ prestamo.socio.email }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a href="{% url 'lista_prestamos' %}" class="btn btn-secondary">&larr; Volver a préstamos</a>
+{% endblock %}

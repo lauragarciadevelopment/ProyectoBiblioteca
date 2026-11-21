@@ -1,0 +1,59 @@
+{% extends 'gestion/base.html' %}
+
+{% block title %}{{ socio.nombre }}{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Socio: {{ socio.nombre }}</h1>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">ID</dt>
+            <dd class="col-sm-9">{{ socio.id }}</dd>
+            <dt class="col-sm-3">Nombre</dt>
+            <dd class="col-sm-9">{{ socio.nombre }}</dd>
+            <dt class="col-sm-3">Documento</dt>
+            <dd class="col-sm-9">{{ socio.documento }}</dd>
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">{{ socio.email }}</dd>
+            <dt class="col-sm-3">Teléfono</dt>
+            <dd class="col-sm-9">{{ socio.telefono|default:"—" }}</dd>
+            <dt class="col-sm-3">Fecha de registro</dt>
+            <dd class="col-sm-9">{{ socio.fecha_registro|date:"d/m/Y" }}</dd>
+        </dl>
+    </div>
+</div>
+
+<h3 class="mb-3">Préstamos del socio</h3>
+<table class="table table-striped table-hover table-bordered bg-white">
+    <thead class="table-dark">
+        <tr>
+            <th>Libro</th>
+            <th>Autor</th>
+            <th>Fecha de préstamo</th>
+            <th>Fecha de devolución</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for prestamo in prestamos %}
+        <tr>
+            <td><a href="{% url 'detalle_libro' prestamo.libro.pk %}">{{ prestamo.libro.titulo }}</a></td>
+            <td><a href="{% url 'detalle_autor' prestamo.libro.autor.pk %}">{{ prestamo.libro.autor.nombre }}</a></td>
+            <td>{{ prestamo.fecha_prestamo|date:"d/m/Y" }}</td>
+            <td>{{ prestamo.fecha_devolucion|date:"d/m/Y"|default:"—" }}</td>
+            <td>
+                {% if prestamo.devuelto %}<span class="badge bg-success">Devuelto</span>
+                {% else %}<span class="badge bg-warning text-dark">Prestado</span>{% endif %}
+            </td>
+            <td><a href="{% url 'detalle_prestamo' prestamo.pk %}" class="btn btn-info btn-sm">Ver detalle</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="text-center">Este socio no tiene préstamos registrados.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'lista_socios' %}" class="btn btn-secondary">&larr; Volver a socios</a>
+{% endblock %}

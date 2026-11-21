@@ -1,0 +1,50 @@
+{% extends 'gestion/base.html' %}
+
+{% block title %}{{ autor.nombre }}{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Autor: {{ autor.nombre }}</h1>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">ID</dt>
+            <dd class="col-sm-9">{{ autor.id }}</dd>
+            <dt class="col-sm-3">Nombre</dt>
+            <dd class="col-sm-9">{{ autor.nombre }}</dd>
+            <dt class="col-sm-3">Nacionalidad</dt>
+            <dd class="col-sm-9">{{ autor.nacionalidad|default:"—" }}</dd>
+            <dt class="col-sm-3">N.º de libros</dt>
+            <dd class="col-sm-9">{{ libros|length }}</dd>
+        </dl>
+    </div>
+</div>
+
+<h3 class="mb-3">Libros de este autor</h3>
+<table class="table table-striped table-hover table-bordered bg-white">
+    <thead class="table-dark">
+        <tr>
+            <th>Título</th>
+            <th>ISBN</th>
+            <th>Año</th>
+            <th>Copias disponibles</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for libro in libros %}
+        <tr>
+            <td>{{ libro.titulo }}</td>
+            <td>{{ libro.isbn }}</td>
+            <td>{{ libro.anio_publicacion }}</td>
+            <td>{{ libro.copias_disponibles }}</td>
+            <td><a href="{% url 'detalle_libro' libro.pk %}" class="btn btn-info btn-sm">Ver detalle</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-center">Este autor no tiene libros registrados.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'lista_autores' %}" class="btn btn-secondary">&larr; Volver a autores</a>
+{% endblock %}

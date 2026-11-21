@@ -1,0 +1,38 @@
+{% extends 'gestion/base.html' %}
+
+{% block title %}Socios{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Socios</h1>
+
+<table class="table table-striped table-hover table-bordered bg-white">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Documento</th>
+            <th>Email</th>
+            <th>Teléfono</th>
+            <th>Fecha de registro</th>
+            <th>Préstamos activos</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for socio in socios %}
+        <tr>
+            <td>{{ socio.id }}</td>
+            <td>{{ socio.nombre }}</td>
+            <td>{{ socio.documento }}</td>
+            <td>{{ socio.email }}</td>
+            <td>{{ socio.telefono|default:"—" }}</td>
+            <td>{{ socio.fecha_registro|date:"d/m/Y" }}</td>
+            <td>{{ socio.prestamos_activos }}</td>
+            <td><a href="{% url 'detalle_socio' socio.pk %}" class="btn btn-info btn-sm">Ver detalle</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="8" class="text-center">No hay socios registrados.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
